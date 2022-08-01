@@ -7,6 +7,9 @@ const jwt = require("jsonwebtoken");
 // import user model
 const UserModel = require("../Models/Users");
 
+// Contact Model
+const ContractModel = require("../Models/Contracts");
+
 // import user model
 const SuperAdminModel = require("../Models/SuperAdmin");
 
@@ -139,6 +142,71 @@ Router.post(
             res.json({ authToken: authToken });
         } catch (error) {
             res.status(500).send({ error: "Some error occured" });
+        }
+    }
+);
+
+
+//ROUTE 5: get users
+Router.get(
+    "/allusers",
+    async (req, res) => {
+        try {
+            const allUsers = await UserModel.find().populate("contract");
+            return res.json(allUsers);
+        } catch (error) {
+            return res.status(500).send({ error: error.message });
+        }
+    }
+);
+
+//ROUTE 4: Add new contract
+Router.post(
+    "/contract/add",
+    async (req, res) => {
+        const {user,start,end} = req.body;
+        try {
+            // first disable all the contracts
+            await ContractModel.updateMany({ user: user},{ $set: { current: 0 }});
+            // Add new contract
+            const newContarct = await ContractModel.create({
+                user: user,
+                start: start,
+                end: end,
+            });
+            return res.json(newContarct);
+        } catch (error) {
+            return res.status(500).send({ error: error.message });
+        }
+    }
+);
+
+//ROUTE 5: Disable user
+Router.post(
+    "/disable/:id",
+    async (req, res) => {
+        const id = req.params.id;
+        try {
+            // first disable all the contracts
+            const updatedUser = await UserModel.findByIdAndUpdate({ _id: id},{ $set: { status: "disable" }});
+            return res.json(updatedUser);
+        } catch (error) {
+            return res.status(500).send({ error: error.message });
+        }
+    }
+);
+
+//ROUTE 5: Enable user
+Router.post(
+    "/disable/:id",
+    async (req, res) => {
+        const id = req.params.id;
+        try {
+            // first disable all the contracts
+            const updatedUser = await UserModel.findByIdAndUpdate({ _id: id},{ $set: { status: "active" }});
+            return res.json(updatedUser);
+        } catch (error) {
+            return res.status(500).send({ error: error.message });
         }
     }
 );

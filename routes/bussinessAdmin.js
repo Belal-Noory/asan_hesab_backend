@@ -24,7 +24,7 @@ Router.post("/login", [body("email", "لطفآ ایمیل تانرا وارد ک
     try {
         // destructure email and password
         const { email, password } = req.body;
-        // // check if we already have a user with this email
+        // check if we already have a user with this email
         let User = await UserModel.findOne({ email });
         // if user exists then return error that the email is already taken
         if (!User) {
