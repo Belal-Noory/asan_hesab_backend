@@ -20,5 +20,5 @@ const contractSchema = new Schema({
         default: 1
     }
 });
-const Contract = mongoose.model("contract", customerSchema);
+const Contract = mongoose.model("contract", contractSchema);
 module.exports = Contract;

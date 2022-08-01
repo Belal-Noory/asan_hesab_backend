@@ -58,7 +58,6 @@ Router.get("/login", [body("email", "لطفآ ایمیل تانرا وارد ک�
 //ROUTE 2: Super Admin add new bussiness users
 Router.post(
     "/add",
-    bussinessAdminMiddleware,
     [
         body("name", "لطفآ اسم تانرا وارد کنید").not().isEmpty().trim().escape().isLength({ min: 4 }),
         body("email", "لطفآ ایمیل تانرا وارد کنید").isEmail().normalizeEmail(),
@@ -91,6 +90,14 @@ Router.post(
                 company: req.body.company,
             });
 
+            // Add contract
+            const newContarct = await ContractModel.create({
+                user: User._id,
+                start: req.body.start,
+                end: req.body.end,
+            });
+
+            console.log(newContarct);
             const data = {
                 user: {
                     id: User.id,
@@ -146,13 +153,12 @@ Router.post(
     }
 );
 
-
 //ROUTE 4: get all users
 Router.get(
     "/activeusers",
     async (req, res) => {
         try {
-            const allUsers = await UserModel.find({status: "active"}).populate("contract");
+            const allUsers = await ContractModel.find().populate("_id");
             return res.json(allUsers);
         } catch (error) {
             return res.status(500).send({ error: error.message });
