@@ -147,12 +147,12 @@ Router.post(
 );
 
 
-//ROUTE 5: get users
+//ROUTE 4: get all users
 Router.get(
-    "/allusers",
+    "/activeusers",
     async (req, res) => {
         try {
-            const allUsers = await UserModel.find().populate("contract");
+            const allUsers = await UserModel.find({status: "active"}).populate("contract");
             return res.json(allUsers);
         } catch (error) {
             return res.status(500).send({ error: error.message });
@@ -160,7 +160,20 @@ Router.get(
     }
 );
 
-//ROUTE 4: Add new contract
+// ROUTE 5: get disabled users
+Router.get(
+    "/disabledusers",
+    async (req, res) => {
+        try {
+            const allUsers = await UserModel.find({status: "disable"}).populate("contract");
+            return res.json(allUsers);
+        } catch (error) {
+            return res.status(500).send({ error: error.message });
+        }
+    }
+);
+
+//ROUTE 6: Add new contract
 Router.post(
     "/contract/add",
     async (req, res) => {
@@ -181,7 +194,7 @@ Router.post(
     }
 );
 
-//ROUTE 5: Disable user
+//ROUTE 7: Disable user
 Router.post(
     "/disable/:id",
     async (req, res) => {
@@ -196,13 +209,12 @@ Router.post(
     }
 );
 
-//ROUTE 5: Enable user
+//ROUTE 8: Enable user
 Router.post(
-    "/disable/:id",
+    "/enable/:id",
     async (req, res) => {
         const id = req.params.id;
         try {
-            // first disable all the contracts
             const updatedUser = await UserModel.findByIdAndUpdate({ _id: id},{ $set: { status: "active" }});
             return res.json(updatedUser);
         } catch (error) {
