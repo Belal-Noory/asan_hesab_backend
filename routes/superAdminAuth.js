@@ -158,7 +158,7 @@ Router.get(
     "/activeusers",
     async (req, res) => {
         try {
-            const allUsers = await ContractModel.find().populate("_id");
+            const allUsers = await ContractModel.find().populate("user");
             return res.json(allUsers);
         } catch (error) {
             return res.status(500).send({ error: error.message });
