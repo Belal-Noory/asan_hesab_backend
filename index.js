@@ -41,6 +41,10 @@ app.use("/shareholder", Shareholder);
 
 app.use("/withdraw", Withdraw);
 
+app.get("/", (req, res) => {
+  return res.json({ message: "server is working" });
+});
+
 // listen to the specefic port
 app.listen(PORT, () => {
   console.log("server is running on port " + PORT);
