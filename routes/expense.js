@@ -72,11 +72,12 @@ Router.put("/update/:id", bussinessAdminMiddleware, async (req, res) => {
   // destructure all variables
   const { user, date, details, amount, kind } = req.body;
   console.log(req.body);
+  const userID = req.params.id;
   // create new transaction object to just append the changed fields
-  const newCustomer = { user, date, details, amount, kind };
+  const newCustomer = { userID, user, date, details, amount, kind };
   try {
     // find the transaction that needs to be updated
-    let customer = await ExpenseModel.findById(user);
+    let customer = await ExpenseModel.findById(userID);
     // check if transaction exists
     if (!customer) {
       return res.status(404).json({ error: "در سیستم موجود نیست" });
@@ -87,7 +88,7 @@ Router.put("/update/:id", bussinessAdminMiddleware, async (req, res) => {
     }
 
     const updatedTransaction = await ExpenseModel.findByIdAndUpdate(
-      user,
+      userID,
       newCustomer,
       { new: true }
     );
