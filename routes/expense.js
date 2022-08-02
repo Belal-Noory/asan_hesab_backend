@@ -60,6 +60,7 @@ Router.post(
         kind,
       });
       const savedCustomer = await newCustomer.save();
+      console.log(savedCustomer);
       return res.json(savedCustomer);
     } catch (error) {
       return res.status(500).send({ error: error.message });
