@@ -71,7 +71,6 @@ Router.post(
 Router.put("/update/:id", bussinessAdminMiddleware, async (req, res) => {
   // destructure all variables
   const { user, date, details, amount, kind } = req.body;
-  console.log(req.body);
   const userID = req.params.id;
   // create new transaction object to just append the changed fields
   const newCustomer = { userID, user, date, details, amount, kind };
@@ -92,7 +91,6 @@ Router.put("/update/:id", bussinessAdminMiddleware, async (req, res) => {
       newCustomer,
       { new: true }
     );
-    console.log(updatedTransaction);
     return res.json(updatedTransaction);
   } catch (error) {
     return res.status(500).send({ error: error.message });
