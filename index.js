@@ -15,7 +15,7 @@ const mongoose = require("mongoose");
 // create new server/app
 const app = express();
 // Set port from environment or if not then use 5050
-const PORT = process.env.PORT | 5050;
+const PORT = process.env.PORT || 5050;
 
 app.use(cors());
 
