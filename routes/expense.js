@@ -92,9 +92,8 @@ Router.put("/update/:id", bussinessAdminMiddleware, async (req, res) => {
       newCustomer,
       { new: true }
     );
-    const result = await updatedTransaction.json();
-    console.log("Updated = " + result);
-    return res.json(result);
+    console.log(updatedTransaction);
+    return res.json(updatedTransaction);
   } catch (error) {
     return res.status(500).send({ error: error.message });
   }
