@@ -60,7 +60,6 @@ Router.post(
         kind,
       });
       const savedCustomer = await newCustomer.save();
-      console.log(savedCustomer);
       return res.json(savedCustomer);
     } catch (error) {
       return res.status(500).send({ error: error.message });
@@ -94,7 +93,7 @@ Router.put("/update/:id", bussinessAdminMiddleware, async (req, res) => {
     );
     return res.json(updatedTransaction);
   } catch (error) {
-    return res.status(500).send({ error: "Some error occured" });
+    return res.status(500).send({ error: error.message });
   }
 });
 
