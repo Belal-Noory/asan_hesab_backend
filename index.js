@@ -10,6 +10,7 @@ const Customers = require("./routes/customer");
 const Expense = require("./routes/expense");
 const Shareholder = require("./routes/shareholder");
 const Withdraw = require("./routes/withdraw");
+const mongoose = require("mongoose");
 
 // create new server/app
 const app = express();
@@ -42,5 +43,5 @@ app.use("/withdraw", Withdraw);
 
 // listen to the specefic port
 app.listen(PORT, () => {
-    console.log("server is running on port " + PORT);
+  console.log("server is running on port " + PORT);
 });
