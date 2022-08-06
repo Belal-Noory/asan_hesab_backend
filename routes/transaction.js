@@ -3,6 +3,7 @@ const express = require("express");
 const Router = express.Router();
 // import user model
 const TransactionModel = require("../Models/Trasactions");
+const ReceiveModel = require("../Models/Receive");
 
 // import Middlewares
 const bussinessAdminMiddleware = require("../Middlewares/getLogedinUserData");
@@ -11,7 +12,8 @@ const bussinessAdminMiddleware = require("../Middlewares/getLogedinUserData");
 Router.get("/", bussinessAdminMiddleware, async (req, res) => {
     try {
         const allTransactions = await TransactionModel.find({ user: req.user.id, status: "active" }).populate("customer", "name");
-        return res.json(allTransactions);
+        const allReceives = await ReceiveModel.find({ user: req.user.id, status: "active" }).populate("customer", "name");
+        return res.json((allTransactions.concat(allReceives)));
     } catch (error) {
         res.status(500).send({ error: error.message });
     }
@@ -71,6 +73,41 @@ Router.post(
         }
     }
 );
+
+//ROUTE 2.1: Add new receive of the user
+Router.post(
+    "/receive/add",
+    bussinessAdminMiddleware,
+    [
+      body("date", "لطفآ کارمند را بنوسید").not().isEmpty(),
+      body("details", "لطفآ تفصیلات را بنوسید").not().isEmpty(),
+      body("amount", "لطفآ مقدار پول را بنوسید").not().isEmpty(),
+    ],
+    async (req, res) => {
+      // Check if there are some errors in the data sent from the client
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.json({ errors: errors.array() });
+      }
+      // destructure all variables
+      const { customer,date, details, amount,type } = req.body;
+      const userid = req.user.id;
+      try {
+        const newCustomer = new ReceiveModel({
+          user: userid,
+          customer,
+          date,
+          details,
+          amount,
+          type
+        });
+        const savedCustomer = await newCustomer.save();
+        return res.json(savedCustomer);
+      } catch (error) {
+        return res.status(500).send({ error: error.message });
+      }
+    }
+  );
 
 //ROUTE 3: Update specific transaction of the user
 Router.put("/update/:id", bussinessAdminMiddleware, async (req, res) => {
