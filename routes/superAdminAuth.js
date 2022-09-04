@@ -19,6 +19,11 @@ const JWT_SECRET = "ASAN_HESAB%IS_MAQBOL";
 // import Middlewares
 const bussinessAdminMiddleware = require("../Middlewares/getLogedinUserData");
 
+Router.get("/",async (req, res) => {
+    res.send("server is working")
+});
+
+
 //ROUTE 1: Super Admin login
 Router.get(
   "/login",
